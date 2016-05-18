@@ -1,5 +1,16 @@
 #include "tests.h"
 
+void switchOFF()
+{
+    // ensure that all power buses are OFF
+    digitalWrite(BUS1, LOW);
+    digitalWrite(BUS2, LOW);
+    digitalWrite(BUS3, LOW);
+    digitalWrite(BUS4, LOW);
+    digitalWrite(BUS5, LOW);
+    digitalWrite(BUS6, LOW);
+}
+
 /**
  *
  *   Test 1: check that no device is accessible via I2C when the power buses are OFF.
@@ -11,12 +22,7 @@ void Test1()
     beginTest();
     
     // ensure that all power buses are OFF
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
+    switchOFF();
     
     // ensure the system turned off
     delay(10);
@@ -24,8 +30,6 @@ void Test1()
     // scan the bus and count the available devices
     unsigned char num = scanBus();
     showResult(num == 0);
-    
-    endTest();
 }
 
 /**
@@ -39,12 +43,8 @@ void Test2()
     beginTest();
     
     // ensure that all power buses are OFF but number 1
+    switchOFF();
     digitalWrite(BUS1, HIGH);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
     
     // ensure the system turned on
     delay(10);
@@ -54,14 +54,7 @@ void Test2()
     showResult(num == 2);
     
     // turn all the buses off
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
-    
-    endTest();
+    switchOFF();
 }
 
 /**
@@ -77,12 +70,8 @@ void Test3()
     INA226 ina_bus1(0x40);
  
     // ensure that all power buses are OFF but number 1
+    switchOFF();
     digitalWrite(BUS1, HIGH);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
     
     // ensure the system turned on
     delay(10);
@@ -95,6 +84,8 @@ void Test3()
     
     if (ina_bus1.ping())
     {
+        Serial.println("INA226 present");
+        
         // read the telemetry from the INA226
         unsigned short v = ina_bus1.getVoltage();
         signed short i = ina_bus1.getCurrent();
@@ -122,14 +113,7 @@ void Test3()
     }
     
     // turn all the buses off
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
-    
-    endTest();
+    switchOFF();
 }
 
 /**
@@ -145,12 +129,8 @@ void Test4()
     MAX1237 adc_bus1;
  
     // ensure that all power buses are OFF but number 1
+    switchOFF();
     digitalWrite(BUS1, HIGH);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
     
     // ensure the system turned on
     delay(10);
@@ -166,14 +146,7 @@ void Test4()
     showResult((val > 1500) && (val < 1700));
     
     // turn all the buses off
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
-    
-    endTest();
+    switchOFF();
 }
 
 /**
@@ -186,12 +159,8 @@ void Test5()
 {
     beginTest();
     
-    // ensure that all power buses are OFF but number 1
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
+    // ensure that all power buses are OFF but number 6
+    switchOFF();
     digitalWrite(BUS6, HIGH);
     
     // ensure the system turned on
@@ -202,14 +171,7 @@ void Test5()
     showResult(num == 2);
     
     // turn all the buses off
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
-    
-    endTest();
+    switchOFF();
 }
 
 /**
@@ -224,12 +186,8 @@ void Test6()
     
     INA226 ina_bus6(0x45);
     
-    // ensure that all power buses are OFF but number 1
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
+    // ensure that all power buses are OFF but number 6
+    switchOFF();
     digitalWrite(BUS6, HIGH);
     
     // ensure the system turned on
@@ -243,6 +201,8 @@ void Test6()
     
     if (ina_bus6.ping())
     {
+        Serial.println("INA226 present");
+        
         // read the telemetry from the INA226
         unsigned short v = ina_bus6.getVoltage();
         signed short i = ina_bus6.getCurrent();
@@ -270,29 +230,17 @@ void Test6()
     }
     
     // turn all the buses off
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
-    
-    endTest();
+    switchOFF();
 }
 
 void initTests()
 {
     // set-up power bus control pins
     
-    // first set the pin low to avoid glitches
-    digitalWrite(BUS1, LOW);
-    digitalWrite(BUS2, LOW);
-    digitalWrite(BUS3, LOW);
-    digitalWrite(BUS4, LOW);
-    digitalWrite(BUS5, LOW);
-    digitalWrite(BUS6, LOW);
+    // first turn all buses off to avoid glitches
+    switchOFF();
     
-    // then set the pin directio to output
+    // then set the pin direction to output
     pinMode(BUS1, OUTPUT);
     pinMode(BUS2, OUTPUT);
     pinMode(BUS3, OUTPUT);
@@ -300,3 +248,5 @@ void initTests()
     pinMode(BUS5, OUTPUT);
     pinMode(BUS6, OUTPUT);
 }
+
+

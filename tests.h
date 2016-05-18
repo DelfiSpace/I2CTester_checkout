@@ -18,23 +18,15 @@
    
 #define beginTest()                         \
 {                                           \
-    Serial.print("########## ");            \
+    Serial.print("############## ");        \
     Serial.print(__FUNCTION__);             \
-    Serial.println(" start ##########");    \
-}
-
-#define endTest()                           \
-{                                           \
-    Serial.print("########## ");            \
-    Serial.print(__FUNCTION__);             \
-    Serial.println(" end   ##########");    \
-    Serial.println();                       \
+    Serial.println(" ##############");      \
 }
 
 #define showResult(condition)               \
 {                                           \
     Serial.println();                       \
-    Serial.print("-----> Result: \t\t");    \
+    Serial.print("########## Result: ");    \
     if (condition)                          \
     {                                       \
         Serial.println("PASS");             \
@@ -43,7 +35,7 @@
     {                                       \
         Serial.println("FAIL");             \
     }                                       \
-    Serial.println();                       \
+    Serial.println(" ###########");         \
 }
 
 void Test1();
