@@ -5,6 +5,7 @@
 #include <Wire.h>
 #include <INA226.h>
 #include <MAX1237.h>
+#include <PCA9550.h>
 #include "HelperFunctions.h"
 
 #define BUS1       24
@@ -25,17 +26,17 @@
 
 #define showResult(condition)               \
 {                                           \
-    Serial.println();                       \
     Serial.print("########## Result: ");    \
     if (condition)                          \
     {                                       \
-        Serial.println("PASS");             \
+        Serial.print("PASS");               \
     }                                       \
     else                                    \
     {                                       \
-        Serial.println("FAIL");             \
+        Serial.print("FAIL");               \
     }                                       \
     Serial.println(" ###########");         \
+    Serial.println();                       \
 }
 
 void Test1();
@@ -44,6 +45,8 @@ void Test3();
 void Test4();
 void Test5();
 void Test6();
+void Test7();
+void Test8();
 
 void initTests();  
 
