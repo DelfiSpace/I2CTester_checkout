@@ -2,6 +2,10 @@
 #include "HelperFunctions.h"
 #include "tests.h"
 
+#define TEST_BUS_1        true
+#define TEST_BUS_4        true
+#define TEST_BUS_6        true
+
 void setup()
 {
   // Initialize I2C master
@@ -30,20 +34,38 @@ void loop()
   // All busses off, list if any device is on
   Test1();
   
-  // check if there are 2 devices on bus 1
-  Test2();
+  if (TEST_BUS_4)
+  {
+      // check if there are 2 devices
+      Test2();
   
-  // check if the INA226 on bus 1 works 
-  Test3();
+      // check if the INA226 works 
+      Test3();
   
-  // check if the MAX1237 on bus 1 works 
-  Test4();
+      // check if the MAX1237 works 
+      Test4();
+  }
   
-  // check if there are 2 devices on bus 6
-  Test5();
+  if (TEST_BUS_6)
+  {
+      // check if there are 2 devices
+      Test5();
 
-  // check if the INA226 on bus 6 works 
-  Test6();
+      // check if the INA226 works 
+      Test6();
+  
+      // check if the blinker is blinking and if the switch turns ON and OFF
+      Test7();
+  }
+  
+  
+  
+  if (TEST_BUS_1)
+  {
+      Test8();
+      
+      Test9();
+  }
   
   delay(2000);
 }

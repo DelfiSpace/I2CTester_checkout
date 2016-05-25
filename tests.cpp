@@ -1,5 +1,21 @@
 #include "tests.h"
 
+void initTests()
+{
+    // set-up power bus control pins
+    
+    // first turn all buses off to avoid glitches
+    switchOFF();
+    
+    // then set the pin direction to output
+    pinMode(BUS1, OUTPUT);
+    pinMode(BUS2, OUTPUT);
+    pinMode(BUS3, OUTPUT);
+    pinMode(BUS4, OUTPUT);
+    pinMode(BUS5, OUTPUT);
+    pinMode(BUS6, OUTPUT);
+}
+
 void switchOFF()
 {
     // ensure that all power buses are OFF
@@ -10,6 +26,7 @@ void switchOFF()
     digitalWrite(BUS5, LOW);
     digitalWrite(BUS6, LOW);
 }
+
 
 /**
  *
@@ -34,7 +51,7 @@ void Test1()
 
 /**
  *
- *   Test 2: check that only 2 devices are accessible via I2C when only power bus 1 is ON.
+ *   Test 2: check that only 2 devices are accessible via I2C when only power bus 4 is ON.
  *   This is used to verify that no sneak circuit is present and that bus 1 is correctly working.
  *
  */
@@ -42,12 +59,12 @@ void Test2()
 {
     beginTest();
     
-    // ensure that all power buses are OFF but number 1
+    // ensure that all power buses are OFF but number 4
     switchOFF();
-    digitalWrite(BUS1, HIGH);
+    digitalWrite(BUS4, HIGH);
     
     // ensure the system turned on
-    delay(1000);
+    delay(10);
     
     // scan the bus and count the available devices
     unsigned char num = scanBus();
@@ -59,7 +76,7 @@ void Test2()
 
 /**
  *
- *   Test 3: check that the INA226 on bus 1 works properly.
+ *   Test 3: check that the INA226 on bus 4 works properly.
  *   This is used to verify that no sneak circuit is present and that bus 1 is correctly working.
  *
  */
@@ -67,29 +84,29 @@ void Test3()
 {
     beginTest();
  
-    INA226 ina_bus1(0x40);
+    INA226 ina(0x40);
  
     // ensure that all power buses are OFF but number 1
     switchOFF();
-    digitalWrite(BUS1, HIGH);
+    digitalWrite(BUS4, HIGH);
     
     // ensure the system turned on
     delay(10);
     
     // set the shunt resistor for the INA on bus 1
-    ina_bus1.setShuntResistor(SHUNT_RESISTOR);
+    ina.setShuntResistor(SHUNT_RESISTOR);
     
     // ensure enough time for the INA to sample the current once
     delay(10);
     
-    if (ina_bus1.ping())
+    if (ina.ping())
     {
         Serial.println("INA226 present");
         
         // read the telemetry from the INA226
-        unsigned short v = ina_bus1.getVoltage();
-        signed short i = ina_bus1.getCurrent();
-        unsigned short p = ina_bus1.getPower();
+        unsigned short v = ina.getVoltage();
+        signed short i = ina.getCurrent();
+        unsigned short p = ina.getPower();
    
         Serial.print("Voltage: ");
         Serial.print(v, DEC);
@@ -118,7 +135,7 @@ void Test3()
 
 /**
  *
- *   Test 4: check that the MAX1237 on bus 1 works properly.
+ *   Test 4: check that the MAX1237 on bus 4 works properly.
  *   This is used to verify that no sneak circuit is present and that bus 1 is correctly working.
  *
  */
@@ -126,19 +143,19 @@ void Test4()
 {
     beginTest();
  
-    MAX1237 adc_bus1;
+    MAX1237 adc;
  
     // ensure that all power buses are OFF but number 1
     switchOFF();
-    digitalWrite(BUS1, HIGH);
+    digitalWrite(BUS4, HIGH);
     
     // ensure the system turned on
     delay(10);
     
-    adc_bus1.writeRegister(0x80 | 0x02 | (0x05 << 4));
-    adc_bus1.writeRegister(CS2 | SCAN3 | 1);
+    adc.writeRegister(0x80 | 0x02 | (0x05 << 4));
+    adc.writeRegister(CS2 | SCAN3 | 1);
   
-    unsigned short val = adc_bus1.readSingleChannel() >> 1; 
+    unsigned short val = adc.readSingleChannel() >> 1; 
     Serial.print("ADC: ");
     Serial.print(val, DEC);
     Serial.println(" mV");
@@ -184,8 +201,9 @@ void Test6()
 {
     beginTest();
     
-    INA226 ina_bus6(0x45);
-    
+    INA226 ina(0x45);
+    PCA9550 blinker(0x61);
+        
     // ensure that all power buses are OFF but number 6
     switchOFF();
     digitalWrite(BUS6, HIGH);
@@ -193,20 +211,23 @@ void Test6()
     // ensure the system turned on
     delay(10);
     
+    // switch the power load OFF
+    blinker.setOutput(0, 0);
+    
     // set the shunt resistor for the INA on bus 6
-    ina_bus6.setShuntResistor(SHUNT_RESISTOR);
+    ina.setShuntResistor(SHUNT_RESISTOR);
     
     // ensure enough time for the INA to sample the current once
     delay(10);
     
-    if (ina_bus6.ping())
+    if (ina.ping())
     {
         Serial.println("INA226 present");
         
         // read the telemetry from the INA226
-        unsigned short v = ina_bus6.getVoltage();
-        signed short i = ina_bus6.getCurrent();
-        unsigned short p = ina_bus6.getPower();
+        unsigned short v = ina.getVoltage();
+        signed short i = ina.getCurrent();
+        unsigned short p = ina.getPower();
    
         Serial.print("Voltage: ");
         Serial.print(v, DEC);
@@ -243,7 +264,7 @@ void Test7()
 {
     beginTest();
     
-    INA226 ina_bus6(0x45);
+    INA226 ina(0x45);
     PCA9550 blinker(0x61);
     
     // ensure that all power buses are OFF but number 6
@@ -253,72 +274,46 @@ void Test7()
     // ensure the system turned on
     delay(10);
     
+    // switch the power load OFF
+    blinker.setOutput(0, 0);
+    
     // set the shunt resistor for the INA on bus 6
-    ina_bus6.setShuntResistor(SHUNT_RESISTOR);
+    ina.setShuntResistor(SHUNT_RESISTOR);
     
     delay(10);
     
-    if (ina_bus6.ping())
+    if (ina.ping())
     {
         Serial.println("INA226 present");
         
         // read the telemetry from the INA226
-        unsigned short v = ina_bus6.getVoltage();
-        signed short i = ina_bus6.getCurrent();
-        unsigned short p = ina_bus6.getPower();
-   
-        Serial.print("Voltage: ");
-        Serial.print(v, DEC);
-        Serial.println(" mV");
- 
-        Serial.print("Current: ");
-        Serial.print(i, DEC);
+        signed short i1 = ina.getCurrent();
+
+        Serial.print("Current OFF: ");
+        Serial.print(i1, DEC);
         Serial.println(" mA");
  
-        Serial.print("Power ");
-        Serial.print(p, DEC);
-        Serial.println(" mW");
-    }
-    else
-    {
-        Serial.println("INA226 not present");
-    }
+        // turn the power load ON
+        blinker.setOutput(0, 1);
     
-    blinker.setPeriod(0, 0.5);
-    blinker.setDC(0, 128);
-    blinker.setLED(0, 1);
-    //blinker.blinkLED(0, 0);
-    
-    delay(2000);
-    
-    if (ina_bus6.ping())
-    {
-        Serial.println("INA226 present");
+        delay(200);
         
-        // read the telemetry from the INA226
-        unsigned short v = ina_bus6.getVoltage();
-        signed short i = ina_bus6.getCurrent();
-        unsigned short p = ina_bus6.getPower();
-   
-        Serial.print("Voltage: ");
-        Serial.print(v, DEC);
-        Serial.println(" mV");
- 
-        Serial.print("Current: ");
-        Serial.print(i, DEC);
+        signed short i2 = ina.getCurrent();
+        
+        Serial.print("Current ON: ");
+        Serial.print(i2, DEC);
         Serial.println(" mA");
- 
-        Serial.print("Power ");
-        Serial.print(p, DEC);
-        Serial.println(" mW");
+
+        // turn the power load OFF
+        blinker.setOutput(0, 0);
+        
+        showResult((i1 < 20) && (i2 > 850));
     }
     else
     {
         Serial.println("INA226 not present");
+        showResult(false);
     }
-    
-    blinker.setLED(0, 1);
-    //showResult(false);
     
     // turn all the buses off
     switchOFF();
@@ -326,7 +321,7 @@ void Test7()
 
 /**
  *
- *   Test 7: check that the PCA9550 on bus 6 works properly.
+ *   Test 8: check that only 2 devices are accessible via I2C when only power bus 1 is ON.
  *   This is used to verify that no sneak circuit is present and that bus 1 is correctly working.
  *
  */
@@ -334,104 +329,83 @@ void Test8()
 {
     beginTest();
     
-    //INA226 ina_bus6(0x45);
-    //PCA9550 blinker(0x61);
-    
-    INA226 ina_bus6(0x44);
-    PCA9550 blinker(0x60);
-    
-    // ensure that all power buses are OFF but number 6
-    //switchOFF();
-    digitalWrite(BUS4, HIGH);
+    // ensure that all power buses are OFF but number 1
+    switchOFF();
+    digitalWrite(BUS1, HIGH);
     
     // ensure the system turned on
     delay(10);
     
+    // scan the bus and count the available devices
+    unsigned char num = scanBus();
+    showResult(num == 2);
+    
+    // turn all the buses off
+    switchOFF();
+}
+
+/**
+ *
+ *   Test 9: check that the PCA9550 on bus 6 works properly.
+ *   This is used to verify that no sneak circuit is present and that bus 1 is correctly working.
+ *
+ */
+void Test9()
+{
+    beginTest();
+    
+    INA226 ina(0x44);
+    PCA9550 blinker(0x60);
+    
+    // ensure that all power buses are OFF but number 6
+    switchOFF();
+    digitalWrite(BUS1, HIGH);
+    
+    // ensure the system turned on
+    delay(10);
+    
+    // switch the power load OFF
+    blinker.setOutput(0, 0);
+    
     // set the shunt resistor for the INA on bus 6
-    ina_bus6.setShuntResistor(SHUNT_RESISTOR);
+    ina.setShuntResistor(SHUNT_RESISTOR);
     
     delay(10);
     
-    if (ina_bus6.ping())
+    if (ina.ping())
     {
         Serial.println("INA226 present");
         
         // read the telemetry from the INA226
-        unsigned short v = ina_bus6.getVoltage();
-        signed short i = ina_bus6.getCurrent();
-        unsigned short p = ina_bus6.getPower();
-   
-        Serial.print("Voltage: ");
-        Serial.print(v, DEC);
-        Serial.println(" mV");
- 
-        Serial.print("Current: ");
-        Serial.print(i, DEC);
+        signed short i1 = ina.getCurrent();
+
+        Serial.print("Current OFF: ");
+        Serial.print(i1, DEC);
         Serial.println(" mA");
  
-        Serial.print("Power ");
-        Serial.print(p, DEC);
-        Serial.println(" mW");
-    }
-    else
-    {
-        Serial.println("INA226 not present");
-    }
+        // turn the power load ON
+        blinker.setOutput(0, 1);
     
-    blinker.setPeriod(0, 0.5);
-    blinker.setDC(0, 128);
-    //blinker.setLED(0, 1);
-    //blinker.blinkLED(0, 0);
-    
-    delay(5000);
-    
-    if (ina_bus6.ping())
-    {
-        Serial.println("INA226 present");
+        delay(200);
         
-        // read the telemetry from the INA226
-        unsigned short v = ina_bus6.getVoltage();
-        signed short i = ina_bus6.getCurrent();
-        unsigned short p = ina_bus6.getPower();
-   
-        Serial.print("Voltage: ");
-        Serial.print(v, DEC);
-        Serial.println(" mV");
- 
-        Serial.print("Current: ");
-        Serial.print(i, DEC);
+        signed short i2 = ina.getCurrent();
+        
+        Serial.print("Current ON: ");
+        Serial.print(i2, DEC);
         Serial.println(" mA");
- 
-        Serial.print("Power ");
-        Serial.print(p, DEC);
-        Serial.println(" mW");
+
+        // turn the power load OFF
+        blinker.setOutput(0, 0);
+        
+        showResult((i1 < 20) && (i2 > 850));
     }
     else
     {
         Serial.println("INA226 not present");
+        showResult(false);
     }
-    
-    blinker.setLED(0, 0);
-    //showResult(false);
     
     // turn all the buses off
-    //switchOFF();
-}
-
-void initTests()
-{
-    // set-up power bus control pins
-    
-    // first turn all buses off to avoid glitches
     switchOFF();
-    
-    // then set the pin direction to output
-    pinMode(BUS1, OUTPUT);
-    pinMode(BUS2, OUTPUT);
-    pinMode(BUS3, OUTPUT);
-    pinMode(BUS4, OUTPUT);
-    pinMode(BUS5, OUTPUT);
-    pinMode(BUS6, OUTPUT);
 }
-
 

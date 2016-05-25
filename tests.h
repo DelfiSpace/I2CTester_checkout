@@ -16,7 +16,7 @@
 #define BUS6       27
    
 #define SHUNT_RESISTOR 0.05
-   
+
 #define beginTest()                         \
 {                                           \
     Serial.print("############## ");        \
@@ -47,7 +47,9 @@ void Test5();
 void Test6();
 void Test7();
 void Test8();
+void Test9();
 
 void initTests();  
+void switchOFF();
 
 #endif
