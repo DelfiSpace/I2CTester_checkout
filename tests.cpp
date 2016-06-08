@@ -84,7 +84,7 @@ void Test3()
 {
     beginTest();
  
-    INA226 ina(&wire, 0x40);
+    INA226 ina(wire, 0x40);
  
     // ensure that all power buses are OFF but number 1
     switchOFF();
@@ -143,7 +143,7 @@ void Test4()
 {
     beginTest();
  
-    MAX1237 adc(&wire);
+    MAX1237 adc(wire);
  
     // ensure that all power buses are OFF but number 1
     switchOFF();
@@ -201,8 +201,8 @@ void Test6()
 {
     beginTest();
     
-    INA226 ina(&wire, 0x45);
-    PCA9550 blinker(&wire, 0x61);
+    INA226 ina(wire, 0x45);
+    PCA9550 blinker(wire, 0x61);
         
     // ensure that all power buses are OFF but number 6
     switchOFF();
@@ -264,8 +264,8 @@ void Test7()
 {
     beginTest();
     
-    INA226 ina(&wire, 0x45);
-    PCA9550 blinker(&wire, 0x61);
+    INA226 ina(wire, 0x45);
+    PCA9550 blinker(wire, 0x61);
     
     // ensure that all power buses are OFF but number 6
     switchOFF();
@@ -354,8 +354,8 @@ void Test9()
 {
     beginTest();
     
-    INA226 ina(&wire, 0x44);
-    PCA9550 blinker(&wire, 0x60);
+    INA226 ina(wire, 0x44);
+    PCA9550 blinker(wire, 0x60);
     
     // ensure that all power buses are OFF but number 6
     switchOFF();
