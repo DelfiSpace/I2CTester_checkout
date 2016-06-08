@@ -1,4 +1,5 @@
-#include <Wire.h>
+#include <DWire.h>
+#include <DSerial.h>
 #include "HelperFunctions.h"
 #include "tests.h"
 
@@ -6,14 +7,17 @@
 #define TEST_BUS_4        true
 #define TEST_BUS_6        true
 
+DWire wire;
+DSerial serial;
+
 void setup()
 {
   // Initialize I2C master
   // TODO: speed?????
-  Wire.begin();
+  wire.begin(EUSCI_B0_BASE);
   
   // initialize debug UART
-  Serial.begin(9600);
+  serial.begin();
 
   // wait to make sure the UART is initialized
   delay(10);
@@ -24,11 +28,11 @@ void setup()
 
 void loop()
 {
-  Serial.println();
-  Serial.println("-----------------------------------------------------");
-  Serial.println("---------    I2CTester Checkout Software    ---------");
-  Serial.println("-----------------------------------------------------");
-  Serial.println();
+  serial.println();
+  serial.println("-----------------------------------------------------");
+  serial.println("---------    I2CTester Checkout Software    ---------");
+  serial.println("-----------------------------------------------------");
+  serial.println();
   
   // run all the tests in sequence
   // All busses off, list if any device is on
@@ -58,8 +62,6 @@ void loop()
       Test7();
   }
   
-  
-  
   if (TEST_BUS_1)
   {
       Test8();
@@ -67,5 +69,5 @@ void loop()
       Test9();
   }
   
-  delay(2000);
+  //delay(2000);
 }

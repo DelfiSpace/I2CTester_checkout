@@ -2,7 +2,8 @@
 #define __TESTS_H__
 
 #include "Energia.h"
-#include <Wire.h>
+#include <DWire.h>
+#include <DSerial.h>
 #include <INA226.h>
 #include <MAX1237.h>
 #include <PCA9550.h>
@@ -17,27 +18,31 @@
    
 #define SHUNT_RESISTOR 0.05
 
+extern DSerial serial;
+
 #define beginTest()                         \
 {                                           \
-    Serial.print("############## ");        \
-    Serial.print(__FUNCTION__);             \
-    Serial.println(" ##############");      \
+    serial.print("############## ");        \
+    serial.print(__FUNCTION__);             \
+    serial.println(" ##############");      \
 }
 
 #define showResult(condition)               \
 {                                           \
-    Serial.print("########## Result: ");    \
+    serial.print("########## Result: ");    \
     if (condition)                          \
     {                                       \
-        Serial.print("PASS");               \
+        serial.print("PASS");               \
     }                                       \
     else                                    \
     {                                       \
-        Serial.print("FAIL");               \
+        serial.print("FAIL");               \
     }                                       \
-    Serial.println(" ###########");         \
-    Serial.println();                       \
+    serial.println(" ###########");         \
+    serial.println();                       \
 }
+
+
 
 void Test1();
 void Test2();

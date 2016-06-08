@@ -12,30 +12,31 @@
 unsigned char scanBus()
 {
     unsigned char devices = 0;
-    Serial.println("Scanning bus... ");
-    for(unsigned char address = 1; address < 127; address++ )
+    serial.println("Scanning bus... ");
+    for(unsigned char address = 1; address < 126; address++ )
     {
-        Wire.beginTransmission(address);
-        unsigned char count = Wire.requestFrom(address, (unsigned char)1);    // request 1 byte
-        Wire.endTransmission();
+        //wire.beginTransmission(address);
+        unsigned char count = wire.requestFrom(address, (unsigned char)1);    // request 1 byte
+        //wire.endTransmission();
         
         if (count != 0) 
         {
             devices++;
-            Serial.print("Found Address 0x");
+            serial.print("Found Address 0x");
             if (address < 15) 
             {
-                Serial.print('0');
+                serial.print('0');
             }
-            Serial.println(address,HEX);
+            serial.print(address, HEX);
+            serial.println();
         }
         delay(5);
     }   
     if (devices == 0)
     {
-        Serial.println("No device found");
+        serial.println("No device found");
     }
-    Serial.println("Scan completed");
+    serial.println("Scan completed");
     
     return devices;
 }

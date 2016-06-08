@@ -84,7 +84,7 @@ void Test3()
 {
     beginTest();
  
-    INA226 ina(0x40);
+    INA226 ina(&wire, 0x40);
  
     // ensure that all power buses are OFF but number 1
     switchOFF();
@@ -101,31 +101,31 @@ void Test3()
     
     if (ina.ping())
     {
-        Serial.println("INA226 present");
+        serial.println("INA226 present");
         
         // read the telemetry from the INA226
         unsigned short v = ina.getVoltage();
         signed short i = ina.getCurrent();
         unsigned short p = ina.getPower();
    
-        Serial.print("Voltage: ");
-        Serial.print(v, DEC);
-        Serial.println(" mV");
+        serial.print("Voltage: ");
+        serial.print(v, DEC);
+        serial.println(" mV");
  
-        Serial.print("Current: ");
-        Serial.print(i, DEC);
-        Serial.println(" mA");
+        serial.print("Current: ");
+        serial.print(i, DEC);
+        serial.println(" mA");
  
-        Serial.print("Power ");
-        Serial.print(p, DEC);
-        Serial.println(" mW");
+        serial.print("Power ");
+        serial.print(p, DEC);
+        serial.println(" mW");
    
         // check that the values are within the correct range
         showResult((v > 3500) && (v < 5500) && (i > 10) && (i < 20) && (p > 50) && (p < 70));
     }
     else
     {
-        Serial.println("INA226 not present");
+        serial.println("INA226 not present");
         showResult(false);
     }
     
@@ -143,7 +143,7 @@ void Test4()
 {
     beginTest();
  
-    MAX1237 adc;
+    MAX1237 adc(&wire);
  
     // ensure that all power buses are OFF but number 1
     switchOFF();
@@ -156,9 +156,9 @@ void Test4()
     adc.writeRegister(CS2 | SCAN3 | 1);
   
     unsigned short val = adc.readSingleChannel() >> 1; 
-    Serial.print("ADC: ");
-    Serial.print(val, DEC);
-    Serial.println(" mV");
+    serial.print("ADC: ");
+    serial.print(val, DEC);
+    serial.println(" mV");
     
     showResult((val > 1500) && (val < 1700));
     
@@ -201,8 +201,8 @@ void Test6()
 {
     beginTest();
     
-    INA226 ina(0x45);
-    PCA9550 blinker(0x61);
+    INA226 ina(&wire, 0x45);
+    PCA9550 blinker(&wire, 0x61);
         
     // ensure that all power buses are OFF but number 6
     switchOFF();
@@ -222,31 +222,31 @@ void Test6()
     
     if (ina.ping())
     {
-        Serial.println("INA226 present");
+        serial.println("INA226 present");
         
         // read the telemetry from the INA226
         unsigned short v = ina.getVoltage();
         signed short i = ina.getCurrent();
         unsigned short p = ina.getPower();
    
-        Serial.print("Voltage: ");
-        Serial.print(v, DEC);
-        Serial.println(" mV");
+        serial.print("Voltage: ");
+        serial.print(v, DEC);
+        serial.println(" mV");
  
-        Serial.print("Current: ");
-        Serial.print(i, DEC);
-        Serial.println(" mA");
+        serial.print("Current: ");
+        serial.print(i, DEC);
+        serial.println(" mA");
  
-        Serial.print("Power ");
-        Serial.print(p, DEC);
-        Serial.println(" mW");
+        serial.print("Power ");
+        serial.print(p, DEC);
+        serial.println(" mW");
    
         // check that the values are within the correct range
         showResult((v > 3500) && (v < 5500) && (i > 0) && (i < 10) && (p > 10) && (p < 30));
     }
     else
     {
-        Serial.println("INA226 not present");
+        serial.println("INA226 not present");
         showResult(false);
     }
     
@@ -264,8 +264,8 @@ void Test7()
 {
     beginTest();
     
-    INA226 ina(0x45);
-    PCA9550 blinker(0x61);
+    INA226 ina(&wire, 0x45);
+    PCA9550 blinker(&wire, 0x61);
     
     // ensure that all power buses are OFF but number 6
     switchOFF();
@@ -284,14 +284,14 @@ void Test7()
     
     if (ina.ping())
     {
-        Serial.println("INA226 present");
+        serial.println("INA226 present");
         
         // read the telemetry from the INA226
         signed short i1 = ina.getCurrent();
 
-        Serial.print("Current OFF: ");
-        Serial.print(i1, DEC);
-        Serial.println(" mA");
+        serial.print("Current OFF: ");
+        serial.print(i1, DEC);
+        serial.println(" mA");
  
         // turn the power load ON
         blinker.setOutput(0, 1);
@@ -300,9 +300,9 @@ void Test7()
         
         signed short i2 = ina.getCurrent();
         
-        Serial.print("Current ON: ");
-        Serial.print(i2, DEC);
-        Serial.println(" mA");
+        serial.print("Current ON: ");
+        serial.print(i2, DEC);
+        serial.println(" mA");
 
         // turn the power load OFF
         blinker.setOutput(0, 0);
@@ -311,7 +311,7 @@ void Test7()
     }
     else
     {
-        Serial.println("INA226 not present");
+        serial.println("INA226 not present");
         showResult(false);
     }
     
@@ -354,8 +354,8 @@ void Test9()
 {
     beginTest();
     
-    INA226 ina(0x44);
-    PCA9550 blinker(0x60);
+    INA226 ina(&wire, 0x44);
+    PCA9550 blinker(&wire, 0x60);
     
     // ensure that all power buses are OFF but number 6
     switchOFF();
@@ -374,14 +374,14 @@ void Test9()
     
     if (ina.ping())
     {
-        Serial.println("INA226 present");
+        serial.println("INA226 present");
         
         // read the telemetry from the INA226
         signed short i1 = ina.getCurrent();
 
-        Serial.print("Current OFF: ");
-        Serial.print(i1, DEC);
-        Serial.println(" mA");
+        serial.print("Current OFF: ");
+        serial.print(i1, DEC);
+        serial.println(" mA");
  
         // turn the power load ON
         blinker.setOutput(0, 1);
@@ -390,9 +390,9 @@ void Test9()
         
         signed short i2 = ina.getCurrent();
         
-        Serial.print("Current ON: ");
-        Serial.print(i2, DEC);
-        Serial.println(" mA");
+        serial.print("Current ON: ");
+        serial.print(i2, DEC);
+        serial.println(" mA");
 
         // turn the power load OFF
         blinker.setOutput(0, 0);
@@ -401,7 +401,7 @@ void Test9()
     }
     else
     {
-        Serial.println("INA226 not present");
+        serial.println("INA226 not present");
         showResult(false);
     }
     

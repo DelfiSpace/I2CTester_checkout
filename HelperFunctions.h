@@ -2,7 +2,11 @@
 #define _HELPERFUNCTIONS_H__
 
 #include "Energia.h"
-#include <Wire.h>
+#include <DWire.h>
+#include <DSerial.h>
+
+extern DWire wire;
+extern DSerial serial;
 
 unsigned char scanBus();
 
