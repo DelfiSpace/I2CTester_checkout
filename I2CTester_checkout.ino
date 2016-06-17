@@ -29,7 +29,7 @@ void setup()
 {
   // Initialize I2C master
   // TODO: speed?????
-  wire.begin(EUSCI_B0_BASE);
+  wire.begin(EUSCI_B1_BASE);
   
   // initialize debug UART
   serial.begin();
