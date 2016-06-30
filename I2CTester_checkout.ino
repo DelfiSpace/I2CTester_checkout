@@ -22,14 +22,14 @@
 #define TEST_BUS_4        true
 #define TEST_BUS_6        true
 
-DWire wire;
+DWire wire(EUSCI_B1_BASE);
 DSerial serial;
 
 void setup()
 {
   // Initialize I2C master
   // TODO: speed?????
-  wire.begin(EUSCI_B1_BASE);
+  wire.begin();
   
   // initialize debug UART
   serial.begin();
