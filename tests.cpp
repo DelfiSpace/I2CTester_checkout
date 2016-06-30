@@ -227,7 +227,7 @@ void Test6()
     delay(10);
     
     // switch the power load OFF
-    blinker.setOutput(0, 0);
+    blinker.setOutput(0, 1);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -290,7 +290,7 @@ void Test7()
     delay(10);
     
     // switch the power load OFF
-    blinker.setOutput(0, 0);
+    blinker.setOutput(0, 1);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -309,7 +309,7 @@ void Test7()
         serial.println(" mA");
  
         // turn the power load ON
-        blinker.setOutput(0, 1);
+        blinker.setOutput(0, 0);
     
         delay(200);
         
@@ -320,7 +320,7 @@ void Test7()
         serial.println(" mA");
 
         // turn the power load OFF
-        blinker.setOutput(0, 0);
+        blinker.setOutput(0, 1);
         
         showResult((i1 < 20) && (i2 > 850));
     }
@@ -380,7 +380,7 @@ void Test9()
     delay(10);
     
     // switch the power load OFF
-    blinker.setOutput(0, 0);
+    blinker.setOutput(0, 1);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -399,7 +399,7 @@ void Test9()
         serial.println(" mA");
  
         // turn the power load ON
-        blinker.setOutput(0, 1);
+        blinker.setOutput(0, 0);
     
         delay(200);
         
@@ -410,7 +410,7 @@ void Test9()
         serial.println(" mA");
 
         // turn the power load OFF
-        blinker.setOutput(0, 0);
+        blinker.setOutput(0, 1);
         
         showResult((i1 < 20) && (i2 > 850));
     }
