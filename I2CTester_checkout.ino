@@ -28,7 +28,7 @@ DSerial serial;
 void setup()
 {
   // Initialize I2C master
-  // TODO: speed?????
+  wire.setStandardSpeed();
   wire.begin();
   
   // initialize debug UART
