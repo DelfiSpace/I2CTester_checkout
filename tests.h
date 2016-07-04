@@ -19,6 +19,7 @@
 #include "Energia.h"
 #include <DWire.h>
 #include <DSerial.h>
+#include <I2CScanner.h>
 #include <INA226.h>
 #include <MAX1237.h>
 #include <PCA9550.h>

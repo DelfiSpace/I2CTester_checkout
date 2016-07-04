@@ -15,6 +15,17 @@
  
 #include "tests.h"
 
+void deviceFound(unsigned char device)
+{
+  serial.print("Found Address 0x");
+  if (device < 15) 
+  {
+      serial.print('0');
+  }
+  serial.print(device, HEX);
+  serial.println();
+}
+
 void initTests()
 {
     // set-up power bus control pins
@@ -60,7 +71,11 @@ void Test1()
     delay(10);
     
     // scan the bus and count the available devices
-    unsigned char num = scanBus();
+    unsigned char num = I2CScanner::scan(wire, deviceFound);
+    if (num == 0)
+    {
+        serial.println("No device found");
+    }
     showResult(num == 0);
 }
 
@@ -82,7 +97,11 @@ void Test2()
     delay(10);
     
     // scan the bus and count the available devices
-    unsigned char num = scanBus();
+    unsigned char num = I2CScanner::scan(wire, deviceFound);
+    if (num == 0)
+    {
+        serial.println("No device found");
+    }
     showResult(num == 2);
     
     // turn all the buses off
@@ -199,7 +218,11 @@ void Test5()
     delay(10);
     
     // scan the bus and count the available devices
-    unsigned char num = scanBus();
+    unsigned char num = I2CScanner::scan(wire, deviceFound);
+    if (num == 0)
+    {
+        serial.println("No device found");
+    }
     showResult(num == 2);
     
     // turn all the buses off
@@ -352,7 +375,11 @@ void Test8()
     delay(10);
     
     // scan the bus and count the available devices
-    unsigned char num = scanBus();
+    unsigned char num = I2CScanner::scan(wire, deviceFound);
+    if (num == 0)
+    {
+        serial.println("No device found");
+    }
     showResult(num == 2);
     
     // turn all the buses off
