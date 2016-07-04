@@ -22,7 +22,7 @@
 #define TEST_BUS_4        true
 #define TEST_BUS_6        true
 
-DWire wire(EUSCI_B1_BASE);
+DWire wire;
 DSerial serial;
 
 void setup()
