@@ -15,7 +15,6 @@
  
 #include <DWire.h>
 #include <DSerial.h>
-#include "HelperFunctions.h"
 #include "tests.h"
 
 #define TEST_BUS_1        true
@@ -28,7 +27,7 @@ DSerial serial;
 void setup()
 {
   // Initialize I2C master
-  wire.setStandardSpeed();
+  wire.setStandardMode();
   wire.begin();
   
   // initialize debug UART

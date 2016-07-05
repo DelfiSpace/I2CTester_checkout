@@ -23,7 +23,6 @@
 #include <INA226.h>
 #include <MAX1237.h>
 #include <PCA9550.h>
-#include "HelperFunctions.h"
 
 #define BUS1       24
 #define BUS2        5
@@ -32,8 +31,9 @@
 #define BUS5       26
 #define BUS6       27
    
-#define SHUNT_RESISTOR 0.05
+#define SHUNT_RESISTOR 0.04
 
+extern DWire wire;
 extern DSerial serial;
 
 #define beginTest()                         \

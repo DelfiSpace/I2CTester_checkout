@@ -250,7 +250,7 @@ void Test6()
     delay(10);
     
     // switch the power load OFF
-    blinker.setOutput(0, 1);
+    blinker.setLEDsetLED(0, 0);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -313,7 +313,7 @@ void Test7()
     delay(10);
     
     // switch the power load OFF
-    blinker.setOutput(0, 1);
+    blinker.setLED(0, 0);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -332,7 +332,7 @@ void Test7()
         serial.println(" mA");
  
         // turn the power load ON
-        blinker.setOutput(0, 0);
+        blinker.setLED(0, 1);
     
         delay(200);
         
@@ -343,9 +343,9 @@ void Test7()
         serial.println(" mA");
 
         // turn the power load OFF
-        blinker.setOutput(0, 1);
+        blinker.setLED(0, 0);
         
-        showResult((i1 < 20) && (i2 > 850));
+        showResult((i1 < 20) && (i2 > 800));
     }
     else
     {
@@ -399,7 +399,7 @@ void Test9()
     INA226 ina(wire, 0x44);
     PCA9550 blinker(wire, 0x60);
     
-    // ensure that all power buses are OFF but number 6
+    // ensure that all power buses are OFF but number 1
     switchOFF();
     digitalWrite(BUS1, HIGH);
     
@@ -407,7 +407,7 @@ void Test9()
     delay(10);
     
     // switch the power load OFF
-    blinker.setOutput(0, 1);
+    blinker.setLED(0, 0);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -426,7 +426,7 @@ void Test9()
         serial.println(" mA");
  
         // turn the power load ON
-        blinker.setOutput(0, 0);
+        blinker.setLED(0, 1);
     
         delay(200);
         
@@ -437,9 +437,9 @@ void Test9()
         serial.println(" mA");
 
         // turn the power load OFF
-        blinker.setOutput(0, 1);
+        blinker.setLED(0, 0);
         
-        showResult((i1 < 20) && (i2 > 850));
+        showResult((i1 < 20) && (i2 > 800));
     }
     else
     {
