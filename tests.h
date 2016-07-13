@@ -59,7 +59,8 @@ extern DSerial serial;
 }
 
 
-
+void Test0_A();
+void Test0_B();
 void Test1();
 void Test2();
 void Test3();

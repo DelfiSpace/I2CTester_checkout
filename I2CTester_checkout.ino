@@ -26,18 +26,26 @@ DSerial serial;
 
 void setup()
 {
-  // Initialize I2C master
-  wire.setStandardMode();
-  wire.begin();
+  // initialize the GPIOs used to control the power buses
+  initTests();
   
   // initialize debug UART
   serial.begin();
 
-  // wait to make sure the UART is initialized
+  // give enough time for the console to be initialized
+  delay(500);
+  
+  // test hot swap isolators: this test should be performed before configuring the I2C master
+  Test0_A();
+  
+  // Initialize I2C master
+  wire.setStandardMode();
+  wire.begin();
+  
   delay(10);
   
-  // initialize the GPIOs used to control the power buses
-  initTests();
+  // ensure I2C is still responsive
+  Test0_B();
 }
 
 void loop()

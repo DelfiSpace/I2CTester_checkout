@@ -53,6 +53,97 @@ void switchOFF()
     digitalWrite(BUS6, LOW);
 }
 
+/**
+ *
+ *   Test 0_A: check hot swap isolators: verify that the 
+ *   isolators are not locking if powered when the bus is 
+ *   active.
+ *
+ */
+void Test0_A()
+{
+  beginTest();
+  
+  // configure the I2C pins as output
+  pinMode( 9, INPUT);
+  pinMode(10, INPUT);
+  
+  int SCL = digitalRead( 9);
+  int SDA = digitalRead(10);
+  
+  if (SCL == LOW)
+  {
+    serial.println("SCL error: SCL is low");
+  }
+  if (SDA == LOW)
+  {
+    serial.println("SDA error: SDA is low");
+  }
+  
+  // set the I2C pins to output
+  pinMode( 9, OUTPUT);
+  pinMode(10, OUTPUT);
+  
+  // force the pins low (bus active)
+  digitalWrite( 9, LOW);
+  digitalWrite(10, LOW);
+  
+  // wait 10 ms
+  delay(10);
+  
+  // turn bus 4 on
+  digitalWrite(BUS4, HIGH);
+  
+  // wait 10 ms
+  delay(10);
+  
+  // set the I2C pins as input (verify they are not locked by the isolator)
+  pinMode( 9, INPUT);
+  pinMode(10, INPUT);
+  
+  // wait 1ms to allow the hotswap circuit to react
+  delay(1);
+  
+  // check the pins
+  SCL = digitalRead( 9);
+  SDA = digitalRead(10);
+  serial.print("SCL: ");
+  serial.print(SCL, DEC);
+  serial.println();
+  serial.print("SDA: ");
+  serial.print(SDA, DEC);
+  serial.println();
+    
+  showResult((SCL == HIGH) && (SDA == HIGH));
+}
+
+/**
+ *
+ *   Test 0_B: veryfy that the isolator is transparent after hot swap.
+ *
+ */
+void Test0_B()
+{
+  beginTest();
+  
+  INA226 ina(wire, 0x40);
+  
+  bool res = ina.ping();
+  
+  if (res)
+  {
+    serial.println("INA226 present");
+  }
+  else
+  {
+    serial.println("INA226 not found");
+  }
+  
+  showResult(res);
+    
+  // ensure that all power buses are OFF
+  switchOFF();
+}
 
 /**
  *
@@ -250,7 +341,7 @@ void Test6()
     delay(10);
     
     // switch the power load OFF
-    blinker.setLEDsetLED(0, 0);
+    blinker.setLED(0, 0);
     
     // set the shunt resistor for the INA on bus 6
     ina.setShuntResistor(SHUNT_RESISTOR);
@@ -334,7 +425,7 @@ void Test7()
         // turn the power load ON
         blinker.setLED(0, 1);
     
-        delay(200);
+        delay(500);
         
         signed short i2 = ina.getCurrent();
         
